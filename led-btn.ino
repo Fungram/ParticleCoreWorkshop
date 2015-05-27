@@ -1,19 +1,24 @@
 // led-btn.ino
 // Copyright Fungram LLC, 2015.
 
-// Setup D0 as input and D1 as output
+// The LED/Pushbutton pins
 int btn_p = D0;
 int led_p = D1;
-// Initialize the serial communication for console messages.
+
+// Setup
 void setup() {
+    // Setup D0 as input and D1 as output
     pinMode(btn_p, INPUT);
     pinMode(led_p, OUTPUT);
+    // Initialize the serial communication for console messages.
     Serial.begin(115200);
 }
 
+// Forever loop
 void loop() {
-  // Read the button state on D1
+  // Read the button state on D0
   int buttonState = digitalRead(btn_p);
+
   // If the button is depressed, the logic
   // input will be HIGH. Keep the LED blinking.
   if (buttonState == HIGH) {
