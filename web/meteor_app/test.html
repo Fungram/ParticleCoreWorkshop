@@ -1,0 +1,19 @@
+<head>
+  <title>Meteor - Particle Core Test App</title>
+</head>
+
+<body>
+  <h1>Welcome!</h1>
+
+  {{> hello}}
+</body>
+
+<template name="hello">
+  {{#if lightState}}
+  <button id="lightButton">Turn OFF</button>
+  {{else}}
+  <button id="lightButton">Turn ON</button>
+  {{/if}}
+  
+  <p>Currnet State of the button is {{lightState}}.</p>
+</template>
