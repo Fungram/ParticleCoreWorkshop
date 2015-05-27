@@ -1,20 +1,25 @@
 // led-btn-ldr-tmp.ino
 // Copyright Fungram LLC, 2015.
 
-// Setup D0 as input and D1 as output
-// Setup D7 as an input (jumper)
+// Pin definitions
 int btn_p = D0;
 int led_p = D1;
 int ldr_p = A0;
 int tmp_p = A7;
 int jmpr_p = D7;
-// Initialize the serial communication for console messages.
+
+// Setup
 void setup() {
+    // Setup D0 as input and D1 as output
+    // Setup D7 as an input (jumper) to choose between temperature sensor
+    //          operation or the LDR operation
+    // A0 and A7 are analog inputs
     pinMode(tmp_p, INPUT);
     pinMode(ldr_p, INPUT);
     pinMode(btn_p, INPUT);
     pinMode(led_p, OUTPUT);
     pinMode(jmpr_p, INPUT);
+    // Initialize the serial communication for console messages.
     Serial.begin(115200);
 }
 
@@ -28,16 +33,18 @@ void blink_led(int blink_dur) {
   delay(blink_dur);
 }
 
+// Forever loop
 void loop() {
   // Read the button state on D1
   int buttonState = digitalRead(btn_p);
+
   // If the button is depressed, the logic
   // input will be HIGH. Keep the LED blinking.
   if (buttonState == HIGH) {
     Serial.println("Button active (depressed)!");
     blink_led(1000);
   } else {
-    // When the button is not depressed, the D1 input is LOW.
+    // When the button is not depressed, the D0 input is LOW.
     // Keep the LED off while this happens.
     Serial.println("Button not active (not depressed)!");
     Serial.println("LED is OFF!");
@@ -64,7 +71,11 @@ void loop() {
       int tmp_reading = analogRead(tmp_p);
       Serial.print("Temperature reading: ");
       Serial.println(tmp_reading);
+
+      // Convert reading (0-4095) into voltage (0-3.3V)
       double voltage = (tmp_reading * 3.3) / 4096;
+
+      // The voltage to temperature conversion based on the TMP36 datasheet
       double temperature = (voltage - 0.5) * 100;
       Serial.print("Ambient temperature is: ");
       Serial.println(temperature);
